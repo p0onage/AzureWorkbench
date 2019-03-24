@@ -1,0 +1,242 @@
+{
+  "ApplicationName": "DonationDare",
+  "DisplayName": "Donation Dare",
+  "Description": "Allows a individual to put someone forward to do a task with a reward of a donation being made upon completion",
+  "ApplicationRoles": [
+    {
+      "Name": "Judge",
+      "Description": "User that signs off the task being completed"
+    },
+    {
+      "Name": "Challenger",
+      "Description": "User that is initialising the dare"
+    },
+    {
+      "Name": "Competitor",
+      "Description": "User that the task is intended for"
+    }
+  ],
+  "Workflows": [
+    {
+      "Name": "DareInitialisor",
+      "DisplayName": "Daring",
+      "Description": "Handles the business logic for the dare scenario",
+      "Initiators": [ "Challenger" ],
+      "StartState":  "DareInstantiated",
+      "Properties": [
+        {
+          "Name": "State",
+          "DisplayName": "State",
+          "Description": "Holds the state of the contract",
+          "Type": {
+            "Name": "state"
+          }
+        },
+        {
+          "Name": "Description",
+          "DisplayName": "Description",
+          "Description": "Describes the asset being sold",
+          "Type": {
+            "Name": "string"
+          }
+        },
+        {
+          "Name": "DonationAmount",
+          "DisplayName": "Donation Amount",
+          "Description": "The donation being made for completing the task",
+          "Type": {
+            "Name": "money"
+          }
+        },
+        {
+          "Name": "Judge",
+          "DisplayName": "Instance Judge",
+          "Description": "The user that judges that the has been completed",
+          "Type": {
+            "Name": "Judge"
+          }
+        },
+        {
+          "Name": "Competitor",
+          "DisplayName": "Competitor",
+          "Description": "The user whom is expected to complete the challenge",
+          "Type": {
+            "Name": "Competitor"
+          }
+        },
+        {
+          "Name": "Challenger",
+          "DisplayName": "The challenger",
+          "Description": "The user who is daring a competitor to perform a task",
+          "Type": {
+            "Name": "Challenger"
+          }
+        }
+      ],
+      "Constructor": {
+        "Parameters": [
+          {
+            "Name": "description",
+            "Description": "The description of the dare being asked of the competitor",
+            "DisplayName": "Description",
+            "Type": {
+              "Name": "string"
+            }
+          },
+          {
+            "Name": "price",
+            "Description": "The price of the donation",
+            "DisplayName": "Price",
+            "Type": {
+              "Name": "money"
+            }
+          },
+          {
+            "Name": "judge",
+            "Description": "The user who will validate the dare has been completed",
+            "DisplayName": "judge",
+            "Type": {
+              "Name": "Judge"
+            }
+          },
+          {
+            "Name": "competitor",
+            "Description": "The user who the dare is intented for",
+            "DisplayName": "competitor",
+            "Type": {
+              "Name": "Competitor"
+            }
+          }
+        ]
+      },
+      "Functions": [
+        {
+          "Name": "Modify",
+          "DisplayName": "Modify",
+          "Description": "Modify the description/donation of this dare instance",
+          "Parameters": [
+            {
+              "Name": "description",
+              "Description": "The new description of the dare",
+              "DisplayName": "Description",
+              "Type": {
+                "Name": "string"
+              }
+            },
+            {
+              "Name": "price",
+              "Description": "The new donation amount",
+              "DisplayName": "Price",
+              "Type": {
+                "Name": "money"
+              }
+            }
+          ]
+        },
+        {
+          "Name": "RejectDare",
+          "DisplayName": "Reject",
+          "Description": "Reject the dare",
+          "Parameters": []
+        },
+        {
+          "Name": "AcceptDare",
+          "DisplayName": "Accept Dare",
+          "Description": "Accept the challanger's dare",
+          "Parameters": []
+        },
+        {
+          "Name": "JudgeConfirmed",
+          "DisplayName": "Judge Confirmed",
+          "Description": "acknowledge that the dare has been completed",
+          "Parameters": []
+        }
+      ],
+      "States": [
+        {
+          "Name": "DareInstantiated",
+          "DisplayName": "Dare Instantiated",
+          "Description": "The initial state of a dare workflow",
+          "PercentComplete": 20,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": [ ],
+              "AllowedInstanceRoles": ["Competitor"],
+              "Description": "Accept the dare",
+              "Function": "AcceptDare",
+              "NextStates": [ "DareAccepted" ],
+              "DisplayName": "Accept Dare"
+            },
+            {
+              "AllowedRoles": [ ],
+              "AllowedInstanceRoles": ["Competitor"],
+              "Description": "Reject the dare",
+              "Function": "RejectDare",
+              "NextStates": ["DareRejected"],
+              "DisplayName": "Reject Dare"
+            }
+          ]
+        },
+        {
+          "Name": "DareAccepted",
+          "DisplayName": "Awaiting Judge",
+          "Description": "A Judge needs to confirm the dare has been completed",
+          "PercentComplete": 60,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": [],
+              "AllowedInstanceRoles": [ "Judge" ],
+              "Description": "Judge confirms the challenge has been completed",
+              "Function": "JudgeConfirmed",
+              "NextStates": [ "JudgeConfirmed" ],
+              "DisplayName": "awaiting a judge"
+            }
+          ]
+        },
+        {
+          "Name": "JudgeConfirmed",
+          "DisplayName": "Awaiting Judge",
+          "Description": "A Judge needs to confirm the dare has been completed",
+          "PercentComplete": 60,
+          "Style": "Success",
+          "Transitions": [
+            {
+              "AllowedRoles": [],
+              "AllowedInstanceRoles": [ "Judge" ],
+              "Description": "Judge confirms the challenge has been completed",
+              "Function": "JudgeConfirmed",
+              "NextStates": [ "Complete" ],
+              "DisplayName": "awaiting a judge"
+            }
+          ]
+        },
+        {
+          "Name": "Complete",
+          "DisplayName": "Complete",
+          "Description": "A dare is complete",
+          "PercentComplete": 100,
+          "Style": "Success",
+          "Transitions": []
+        },
+        {
+          "Name": "DareRejected",
+          "DisplayName": "Rejected",
+          "Description": "A dare is rejected",
+          "PercentComplete": 100,
+          "Style": "Failure",
+          "Transitions": []
+        },
+        {
+          "Name": "Terminated",
+          "DisplayName": "Terminated",
+          "Description": "a dare has been cancelled",
+          "PercentComplete": 100,
+          "Style": "Failure",
+          "Transitions": []
+        }
+      ]
+    }
+  ]
+}
