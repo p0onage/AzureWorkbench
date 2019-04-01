@@ -140,6 +140,12 @@
           "Parameters": []
         },
         {
+          "Name": "Complete",
+          "DisplayName": "Complete",
+          "Description": "Complete the dare",
+          "Parameters": []
+        },
+        {
           "Name": "AcceptDare",
           "DisplayName": "Accept Dare",
           "Description": "Accept the challanger's dare",
@@ -191,24 +197,24 @@
               "Description": "Judge confirms the challenge has been completed",
               "Function": "JudgeConfirmed",
               "NextStates": [ "JudgeConfirmed" ],
-              "DisplayName": "awaiting a judge"
+              "DisplayName": "Judge Confirmed"
             }
           ]
         },
         {
           "Name": "JudgeConfirmed",
-          "DisplayName": "Awaiting Judge",
-          "Description": "A Judge needs to confirm the dare has been completed",
-          "PercentComplete": 60,
+          "DisplayName": "A Judge has confirmed",
+          "Description": "A Judge has confirmed this dare has been completed",
+          "PercentComplete": 90,
           "Style": "Success",
           "Transitions": [
             {
               "AllowedRoles": [],
               "AllowedInstanceRoles": [ "Judge" ],
               "Description": "Judge confirms the challenge has been completed",
-              "Function": "JudgeConfirmed",
+              "Function": "Complete",
               "NextStates": [ "Complete" ],
-              "DisplayName": "awaiting a judge"
+              "DisplayName": "Complete"
             }
           ]
         },
