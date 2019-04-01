@@ -55,6 +55,11 @@ contract DareInitialisor
         State = StateType.JudgeConfirmed;
     }
 
+    function Complete() public 
+    {
+        State = StateType.Complete;
+    }
+
     function AcceptDare() public
     {
         if (State != StateType.DareInstantiated)
